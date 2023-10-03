@@ -6,6 +6,7 @@ import { CiLocationOn } from 'react-icons/ci';
 import { FaSearch } from 'react-icons/fa';
 import { HiOutlineShoppingCart } from 'react-icons/hi';
 import Data from '../../Data/Data';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   const [showAll, setShowAll] = useState(false);
@@ -15,7 +16,7 @@ const Header = () => {
       <div className='headerHover '>
         <img className='w-24 mt-2' src={logo} alt='logo' />
       </div>
-      <div className='headerHover '>
+      <div className='headerHover hidden mdl:inline-flex'>
         <CiLocationOn />
         <p className='text-sm text-lightText font-light flex flex-col'>
           Deliver to
@@ -24,7 +25,7 @@ const Header = () => {
           </span>
         </p>
       </div>
-      <div className='h-10 rounded-md flex flex-grow relative'>
+      <div className='h-10 rounded-md hidden md:flex flex-grow relative'>
         <span
           onClick={() => setShowAll(!showAll)}
           className='flex flex-row justify-center items-center w-14 h-full  text-e_blue bg-gray-200 hover:bg-gray-300 border-2 cursor-pointer duration-300 text-sm text-e-blue font-titleFont rounded-tl-md rounded-bl-md'
@@ -47,10 +48,14 @@ const Header = () => {
           <FaSearch />
         </span>
       </div>
-      <div className='flex flex-col items-start justify-center headerHover'>
-        <p className='text-xs text-lightText font-light'>Hello,Sign in</p>
-        <p className='text-sm font-semibold -mt-1'>Accounts</p>
-      </div>
+      <Link>
+        <div className='flex flex-col items-start justify-center headerHover'>
+          <p className='text-xs text-lightText font-light'>Hello,Sign in</p>
+          <p className='text-sm font-semibold -mt-1 hidden mdl:inline-flex'>
+            Accounts
+          </p>
+        </div>
+      </Link>
       <div className='flex items-center justify-center headerHover relative  p-2'>
         <HiOutlineShoppingCart />
         <p className='text-xs font-semibold  text-whiteText px-3'>
