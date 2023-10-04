@@ -7,15 +7,19 @@ import { FaSearch } from 'react-icons/fa';
 import { HiOutlineShoppingCart } from 'react-icons/hi';
 import Data from '../../Data/Data';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Header = () => {
   const [showAll, setShowAll] = useState(false);
-  console.log(showAll);
+  const products = useSelector((state) => state.amazon.products);
+  console.log(products);
   return (
     <div className='w-full bg-e_blue text-whiteText px-4 py-3 flex items-center gap-5 sticky top-0 z-50'>
-      <div className='headerHover '>
-        <img className='w-24 mt-2' src={logo} alt='logo' />
-      </div>
+      <Link to='/'>
+        <div className='headerHover '>
+          <img className='w-24 mt-2' src={logo} alt='logo' />
+        </div>
+      </Link>
       <div className='headerHover hidden mdl:inline-flex'>
         <CiLocationOn />
         <p className='text-sm text-lightText font-light flex flex-col'>
@@ -56,15 +60,17 @@ const Header = () => {
           </p>
         </div>
       </Link>
-      <div className='flex items-center justify-center headerHover relative  p-2'>
-        <HiOutlineShoppingCart />
-        <p className='text-xs font-semibold  text-whiteText px-3'>
-          Cart
-          <span className='absolute text-xs -top-0.5 left-6 font-semibold p-1 h-4 bg-[#f3a847] text-e_blue rounded-full flex justify-center items-center'>
-            0
-          </span>
-        </p>
-      </div>
+      <Link to='/cart'>
+        <div className='flex items-center justify-center headerHover relative  p-2'>
+          <HiOutlineShoppingCart />
+          <p className='text-xs font-semibold  text-whiteText px-3'>
+            Cart
+            <span className='absolute text-xs -top-0.5 left-6 font-semibold p-1 h-4 bg-[#f3a847] text-e_blue rounded-full flex justify-center items-center'>
+              {products.length > 0 ? products.length : 0}
+            </span>
+          </p>
+        </div>
+      </Link>
     </div>
   );
 };
