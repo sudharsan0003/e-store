@@ -7,6 +7,7 @@ import {
   bannerImgThree,
   bannerImgFour,
   bannerImgFive,
+  bannerImgSix,
 } from '../../Assets';
 
 const Banner = () => {

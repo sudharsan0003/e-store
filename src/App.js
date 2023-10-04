@@ -15,6 +15,7 @@ import Home from './Pages/Home';
 import { productData } from './Api/Api';
 import Signin from './Pages/Signin';
 import Cart from './Pages/Cart';
+import Registration from './Pages/Registration';
 
 const Layout = () => {
   return (
@@ -30,10 +31,13 @@ const Layout = () => {
 const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path='/' element={<Layout />}>
-        <Route index element={<Home />} loader={productData}></Route>
-        <Route path='/signin' element={<Signin />}></Route>
-        <Route path='/cart' element={<Cart />}></Route>
+      <Route>
+        <Route path='/' element={<Layout />}>
+          <Route index element={<Home />} loader={productData}></Route>
+          <Route path='/cart' element={<Cart />}></Route>
+          <Route path='/signin' element={<Signin />}></Route>
+          <Route path='/registration' element={<Registration />}></Route>
+        </Route>
       </Route>
     )
   );

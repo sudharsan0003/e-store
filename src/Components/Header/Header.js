@@ -12,7 +12,6 @@ import { useSelector } from 'react-redux';
 const Header = () => {
   const [showAll, setShowAll] = useState(false);
   const products = useSelector((state) => state.amazon.products);
-  console.log(products);
   return (
     <div className='w-full bg-e_blue text-whiteText px-4 py-3 flex items-center gap-5 sticky top-0 z-50'>
       <Link to='/'>
@@ -52,7 +51,7 @@ const Header = () => {
           <FaSearch />
         </span>
       </div>
-      <Link>
+      <Link to='/signin'>
         <div className='flex flex-col items-start justify-center headerHover'>
           <p className='text-xs text-lightText font-light'>Hello,Sign in</p>
           <p className='text-sm font-semibold -mt-1 hidden mdl:inline-flex'>
