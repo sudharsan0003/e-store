@@ -1,7 +1,12 @@
 import React from 'react';
 import { useState } from 'react';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { Link, useNavigate } from 'react-router-dom';
+import { RotatingLines } from 'react-loader-spinner';
 
 const Registration = () => {
+  const navigate = useNavigate();
+  const auth = getAuth();
   // function
   const [clientName, setClientName] = useState('');
   const [email, setEmail] = useState('');
@@ -12,7 +17,9 @@ const Registration = () => {
   const [errEmail, setErrEmail] = useState('');
   const [errPassword, setErrPassword] = useState('');
   const [errConfirmPassword, setErrConfirmPassword] = useState('');
-
+  const [firebaseErr, setFirebaseErr] = useState('');
+  const [loading, setLoading] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
   // name function
   const handleName = (e) => {
     setClientName(e.target.value);
@@ -47,6 +54,7 @@ const Registration = () => {
     }
     if (!email) {
       setErrEmail('Email is mandatory');
+      setFirebaseErr('');
     } else {
       if (!validateEmail(email)) {
         setErrEmail('Enter a Valid Email');
@@ -75,13 +83,28 @@ const Registration = () => {
       confirmPassword &&
       confirmPassword === password
     ) {
-      console.log(clientName, email, password, confirmPassword);
-      setClientName('');
-      setEmail('');
-      setPassword('');
-      setConfirmPassword('');
+      setLoading(true);
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed up
+          const user = userCredential.user;
+          setLoading(false);
+          setSuccessMsg('Account Created Successfully');
+          setTimeout(() => {
+            navigate('/signin');
+          }, 2000);
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          if (errorCode.includes('auth/email-already-in-use')) {
+            setFirebaseErr('Email Already in use, Try another one');
+          }
+          // ..
+        });
     }
   };
+
   return (
     <div className='w-full'>
       <div className='w-full bg-white pb-10 '>
@@ -113,9 +136,9 @@ const Registration = () => {
                   value={email}
                   className='w-full lowercase py-1 border border-zinc-400 px-2 text-base rounded-sm outline-none focus-within:border-[#e77600] focus-within:shadow-amazonInput '
                 />
-                {errEmail && (
+                {firebaseErr && (
                   <p className='text-red-500 italic text-[10px] font-semibold items-center gap-2 px-1 -mt-1'>
-                    {errEmail}
+                    {firebaseErr}
                   </p>
                 )}
               </div>
@@ -156,6 +179,22 @@ const Registration = () => {
               >
                 Continue
               </button>
+              {loading && (
+                <div className='flex justify-center'>
+                  <RotatingLines
+                    strokeColor='green'
+                    strokeWidth='5'
+                    animationDuration='0.75'
+                    width='50'
+                    visible={true}
+                  />
+                </div>
+              )}
+              {successMsg && (
+                <div>
+                  <p>{successMsg}</p>
+                </div>
+              )}
             </div>
           </div>
         </form>
