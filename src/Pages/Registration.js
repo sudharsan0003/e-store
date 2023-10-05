@@ -7,6 +7,7 @@ import { RotatingLines } from 'react-loader-spinner';
 const Registration = () => {
   const navigate = useNavigate();
   const auth = getAuth();
+
   // function
   const [clientName, setClientName] = useState('');
   const [email, setEmail] = useState('');
@@ -88,6 +89,7 @@ const Registration = () => {
         .then((userCredential) => {
           // Signed up
           const user = userCredential.user;
+
           setLoading(false);
           setSuccessMsg('Account Created Successfully');
           setTimeout(() => {

@@ -49,7 +49,7 @@ const Cart = () => {
                       {item.description.substring(0, 80)}...
                     </p>
                     <p className='text-base mt-2'>
-                      Unit Price <span>₹{item.price}</span>
+                      Unit Price <span>${item.price}</span>
                     </p>
                     <div className='bg-[#F0F2F2] flex justify-center items-center gap-1 w-32 py-1 text-center drop-shadow-1g rounded-md '>
                       <p>Qty</p>
@@ -76,7 +76,7 @@ const Cart = () => {
                   </div>
                   <div>
                     <div className='text-lg font-titleFont font-semibold'>
-                      <p>{item.price * item.quantity}</p>
+                      <p>$ {item.price * item.quantity}</p>
                     </div>
                   </div>
                 </div>
@@ -104,7 +104,7 @@ const Cart = () => {
               <p className='font-semibold  px-10 py-1 flex items-center justify-between'>
                 Total:
                 <span className='text-sm font-bold mt-1 pl-1'>
-                  ₹{totalPrice}
+                  ${totalPrice}
                 </span>
               </p>
             </div>

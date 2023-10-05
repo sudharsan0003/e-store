@@ -21,7 +21,7 @@ module.exports = {
         bodyFont: 'Lato',
       },
       colors: {
-        e_blue: '#131921',
+        e_blue: '#436995',
         e_light: '#232F3E',
         e_yellow: '#febd69',
         whiteText: '#fff',

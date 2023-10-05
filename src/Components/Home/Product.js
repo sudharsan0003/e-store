@@ -30,7 +30,7 @@ const Product = () => {
                 {item.title.substring(0, 15)}
               </h2>
               <p className='text-sm text-gray-600 font-semibold'>
-                {item.price}
+                ${item.price}
               </p>
             </div>
           </div>
