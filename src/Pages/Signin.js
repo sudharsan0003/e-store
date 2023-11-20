@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import {
+  GoogleAuthProvider,
+  getAuth,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from 'firebase/auth';
+import { app, provider } from '../firebase.config';
 import { RotatingLines } from 'react-loader-spinner';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +15,7 @@ import { setUserInfo } from '../redux/amazonSlice';
 
 const Signin = () => {
   const auth = getAuth();
+  const provider = new GoogleAuthProvider();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
@@ -19,6 +26,8 @@ const Signin = () => {
   const [userPassErr, setUserPassErr] = useState('');
   const [loading, setLoading] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const [value, setValue] = useState('');
+
   //email
   const handleEmail = (e) => {
     setEmail(e.target.value);
@@ -34,6 +43,27 @@ const Signin = () => {
     let re = /\S+@\S+\.\S+/;
     return re.test(email);
   }
+  const handleSignInWithPopup = (e) => {
+    e.preventDefault();
+    signInWithPopup(
+      auth,
+      provider.setCustomParameters({ prompt: 'select_account' })
+    ).then((result) => {
+      const user = result.user;
+      dispatch(
+        setUserInfo({
+          _id: user.uid,
+          userName: user.displayName,
+          email: user.email,
+          image: user.photoURL,
+        })
+      );
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
+    });
+  };
+
   //submit function
   const handleLogin = (e) => {
     e.preventDefault();
@@ -159,6 +189,14 @@ const Signin = () => {
                   </div>
                 )}
               </div>
+              <div className=' flex justify-center items-center rounded'>
+                <button
+                  onClick={handleSignInWithPopup}
+                  className='border-1 border-white p-2 rounded mb-3 text-base'
+                >
+                  Sign-in with Google
+                </button>
+              </div>
             </div>
             <p className='w-full text-xs text-gray-600 mt-4 flex items-center '>
               <span className='w-1/3 h-[1px] bg-zinc-400 inline-flex'></span>
@@ -178,3 +216,27 @@ const Signin = () => {
 };
 
 export default Signin;
+
+{
+  /* <div className=' flex justify-center items-center rounded'>
+  <button
+    onClick={handleSignInWIthPopup}
+    className='border-1 border-white p-2 rounded mb-3 text-base'
+  >
+    Sign-in with Google
+  </button>
+</div>; 
+  const handleSignInWIthPopup = (user) => {
+    signInWithPopup(auth, provider).then((data) => {
+      setValue(data.user.email);
+      localStorage.setItem('email', data.user.email);
+      setTimeout(() => {
+        navigate('/home');
+      }, 1500);
+      toast.success('Login Successfully');
+    });
+  };
+  useEffect(() => {
+    setValue(localStorage.getItem('email'));
+  });*/
+}

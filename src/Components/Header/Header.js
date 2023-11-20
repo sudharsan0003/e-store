@@ -28,32 +28,14 @@ const Header = () => {
       .catch((error) => {});
   };
   return (
-    <div className='w-full bg-e_blue text-whiteText px-4 py-3 flex items-center gap-5 sticky top-0 z-50'>
+    <div className='w-full bg-e_blue text-whiteText px-4 py-3 flex justify-around items-center gap-5 sticky top-0 z-50'>
       <Link to='/'>
         <div className='headerHover flex flex-col'>
           <SiHomeassistantcommunitystore className='w-24 mt-2' />
           <span className='text-md font-semibold'>E - Mart</span>
         </div>
       </Link>
-      <div className='headerHover hidden mdl:inline-flex'>
-        <CiLocationOn className='w-8 h-8' />
-        <p className='text-sm pl-2 text-lightText font-light flex flex-col'>
-          Deliver to
-          <span className='text-sm font-semibold text-center -mt-1 text-whiteText'>
-            Coimbatore
-          </span>
-        </p>
-      </div>
-      <div className='h-10 rounded-md hidden md:flex flex-grow relative'>
-        <input
-          type='text'
-          placeholder='Search Products'
-          className='h-full text-base text-e_blue flex-grow outline-none border-none px-2 rounded-tl-md rounded-bl-md'
-        />
-        <span className='w-12 h-full flex items-center justify-center bg-e_yellow hover:bg-#f3a847 duration-300 text-e_blue cursor-pointer rounded-tr-md rounded-br-md'>
-          <FaSearch />
-        </span>
-      </div>
+
       <Link to='/signin'>
         <div className='flex flex-col items-start justify-center headerHover'>
           {userInfo ? (
@@ -79,6 +61,21 @@ const Header = () => {
           </p>
         </div>
       </Link>
+      <Link to='/profile'>
+        {userInfo && (
+          <div>
+            <img
+              className='w-8 h-8 rounded-full '
+              src={
+                userInfo
+                  ? userInfo.image
+                  : 'https://e7.pngegg.com/pngimages/343/677/png-clipart-computer-icons-user-profile-login-my-account-icon-heroes-black-thumbnail.png'
+              }
+              alt='logo'
+            />
+          </div>
+        )}
+      </Link>
       {userInfo && (
         <div onClick={handleLogout} className='headerHover '>
           <LuLogOut className='w-6 h-6' />
@@ -89,3 +86,27 @@ const Header = () => {
 };
 
 export default Header;
+
+{
+  /* <div className='headerHover hidden mdl:inline-flex'>
+        <CiLocationOn className='w-8 h-8' />
+        <p className='text-sm pl-2 text-lightText font-light flex flex-col'>
+          Deliver to
+          <span className='text-sm font-semibold text-center -mt-1 text-whiteText'>
+            Coimbatore
+          </span>
+        </p>
+      </div> */
+}
+{
+  /* <div className='h-10 rounded-md hidden md:flex flex-grow relative'>
+        <input
+          type='text'
+          placeholder='Search Products'
+          className='h-full text-base text-e_blue flex-grow outline-none border-none px-2 rounded-tl-md rounded-bl-md'
+        />
+        <span className='w-12 h-full flex items-center justify-center bg-e_yellow hover:bg-#f3a847 duration-300 text-e_blue cursor-pointer rounded-tr-md rounded-br-md'>
+          <FaSearch />
+        </span>
+      </div> */
+}

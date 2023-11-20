@@ -16,6 +16,7 @@ import { productData } from './Api/Api';
 import Signin from './Pages/Signin';
 import Cart from './Pages/Cart';
 import Registration from './Pages/Registration';
+import Profile from './Pages/Profile';
 
 const Layout = () => {
   return (
@@ -37,6 +38,8 @@ const App = () => {
           <Route path='/cart' element={<Cart />}></Route>
           <Route path='/signin' element={<Signin />}></Route>
           <Route path='/registration' element={<Registration />}></Route>
+          <Route path='/profile' element={<Profile />}></Route>
+          <Route path='/registration/:id' element={<Registration />} />
         </Route>
       </Route>
     )
