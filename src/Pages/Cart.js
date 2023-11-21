@@ -10,11 +10,15 @@ import {
   increment,
   decrement,
 } from '../redux/amazonSlice';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const products = useSelector((state) => state.amazon.products);
   const [totalPrice, setTotalPrice] = useState('');
+
   useEffect(() => {
     let Total = 0;
     products.map((item) => {
@@ -22,6 +26,17 @@ const Cart = () => {
       return setTotalPrice(Total.toFixed(2));
     });
   }, [products]);
+
+  const handleBuy = () => {
+    {
+      dispatch(resetCart());
+    }
+    setTimeout(() => {
+      navigate('/');
+    }, 1500);
+    toast.success('Your Order has been placed Successfully');
+  };
+
   return (
     <div className='w-full bg-gray-300 p-4'>
       {products.length > 0 ? (
@@ -109,7 +124,10 @@ const Cart = () => {
               </p>
             </div>
             <div>
-              <button class='w-full font-titleFont font-medium p-4 text-base bg-gradient-to-tr from-yellow-400 to-yellow-200 border hover:from-yellow-300 hover:to-yellow-400 border-yellow-500 hover:border-yellow-700 active:bg-gradient-to-bl active:from-yellow-400 active:to-yellow-500 duration-200 py-1.5 rounded-md mt-2'>
+              <button
+                class='w-full font-titleFont font-medium p-4 text-base bg-gradient-to-tr from-yellow-400 to-yellow-200 border hover:from-yellow-300 hover:to-yellow-400 border-yellow-500 hover:border-yellow-700 active:bg-gradient-to-bl active:from-yellow-400 active:to-yellow-500 duration-200 py-1.5 rounded-md mt-2'
+                onClick={handleBuy}
+              >
                 Proceed to Buy
               </button>
             </div>

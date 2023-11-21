@@ -17,11 +17,24 @@ import Signin from './Pages/Signin';
 import Cart from './Pages/Cart';
 import Registration from './Pages/Registration';
 import Profile from './Pages/Profile';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Layout = () => {
   return (
     <div>
       <Header />
+      <ToastContainer
+        position='top-right'
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={true}
+        pauseOnFocusLoss
+        Draggable
+        pauseOnHovertheme='colored'
+      />
       <ScrollRestoration />
       <Outlet />
       <Footer />
