@@ -8,35 +8,38 @@ import { CiLocationOn } from 'react-icons/ci';
 import { FaSearch } from 'react-icons/fa';
 import { HiOutlineShoppingCart } from 'react-icons/hi';
 import Data from '../../Data/Data';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { userSignOut } from '../../redux/amazonSlice';
+import { userSignOut, resetCart } from '../../redux/amazonSlice';
 
 const Header = () => {
   const auth = getAuth();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showAll, setShowAll] = useState(false);
   const products = useSelector((state) => state.amazon.products);
   const userInfo = useSelector((state) => state.amazon.userInfo);
-
+  console.log(userInfo);
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
         dispatch(userSignOut());
+        dispatch(resetCart());
       })
       .catch((error) => {});
+    navigate('/');
   };
   return (
     <div className='w-full bg-e_blue text-whiteText px-4 py-3 flex justify-around items-center gap-5 sticky top-0 z-50'>
-      <Link to='/'>
+      <Link to='/home'>
         <div className='headerHover flex flex-col'>
           <SiHomeassistantcommunitystore className='w-24 mt-2' />
           <span className='text-md font-semibold'>E - Mart</span>
         </div>
       </Link>
 
-      <Link to='/signin'>
+      <Link to='/'>
         <div className='flex flex-col items-start justify-center headerHover'>
           {userInfo ? (
             <p className='text-sm text-gray-100 font-medium'>
@@ -61,7 +64,7 @@ const Header = () => {
           </p>
         </div>
       </Link>
-      <Link to='/profile'>
+      <Link to={`/profile`}>
         {userInfo && (
           <div>
             <img
@@ -86,27 +89,3 @@ const Header = () => {
 };
 
 export default Header;
-
-{
-  /* <div className='headerHover hidden mdl:inline-flex'>
-        <CiLocationOn className='w-8 h-8' />
-        <p className='text-sm pl-2 text-lightText font-light flex flex-col'>
-          Deliver to
-          <span className='text-sm font-semibold text-center -mt-1 text-whiteText'>
-            Coimbatore
-          </span>
-        </p>
-      </div> */
-}
-{
-  /* <div className='h-10 rounded-md hidden md:flex flex-grow relative'>
-        <input
-          type='text'
-          placeholder='Search Products'
-          className='h-full text-base text-e_blue flex-grow outline-none border-none px-2 rounded-tl-md rounded-bl-md'
-        />
-        <span className='w-12 h-full flex items-center justify-center bg-e_yellow hover:bg-#f3a847 duration-300 text-e_blue cursor-pointer rounded-tr-md rounded-br-md'>
-          <FaSearch />
-        </span>
-      </div> */
-}

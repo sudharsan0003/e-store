@@ -3,21 +3,28 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { TiTickOutline } from 'react-icons/ti';
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   deleteItem,
   resetCart,
   increment,
   decrement,
 } from '../redux/amazonSlice';
-import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const products = useSelector((state) => state.amazon.products);
   const [totalPrice, setTotalPrice] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
+  const navigate = useNavigate();
+
+  const notify = () => {
+    setSuccessMsg('Your Order has been Placed');
+    setTimeout(() => {
+      dispatch(resetCart());
+      navigate('/home');
+    }, 2000);
+  };
 
   useEffect(() => {
     let Total = 0;
@@ -26,17 +33,6 @@ const Cart = () => {
       return setTotalPrice(Total.toFixed(2));
     });
   }, [products]);
-
-  const handleBuy = () => {
-    {
-      dispatch(resetCart());
-    }
-    setTimeout(() => {
-      navigate('/');
-    }, 1500);
-    toast.success('Your Order has been placed Successfully');
-  };
-
   return (
     <div className='w-full bg-gray-300 p-4'>
       {products.length > 0 ? (
@@ -116,7 +112,7 @@ const Cart = () => {
               </p>
             </div>
             <div>
-              <p className='font-semibold  px-10 py-1 flex items-center justify-between'>
+              <p className='font-semibold  px-10 py-1 flex items-center justify-between mt-16'>
                 Total:
                 <span className='text-sm font-bold mt-1 pl-1'>
                   ${totalPrice}
@@ -126,10 +122,15 @@ const Cart = () => {
             <div>
               <button
                 class='w-full font-titleFont font-medium p-4 text-base bg-gradient-to-tr from-yellow-400 to-yellow-200 border hover:from-yellow-300 hover:to-yellow-400 border-yellow-500 hover:border-yellow-700 active:bg-gradient-to-bl active:from-yellow-400 active:to-yellow-500 duration-200 py-1.5 rounded-md mt-2'
-                onClick={handleBuy}
+                onClick={notify}
               >
                 Proceed to Buy
               </button>
+              <div className='w-full flex justify-center items-center py-32 -mt-10'>
+                <p className=' text-green-500 font-titleFont text-lg font-semibold -mt-28 px-6 py-2'>
+                  {successMsg}
+                </p>
+              </div>
             </div>
           </div>
         </div>

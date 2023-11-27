@@ -12,6 +12,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setUserInfo } from '../redux/amazonSlice';
+import { ToastContainer, toast } from 'react-toastify';
 
 const Signin = () => {
   const auth = getAuth();
@@ -27,6 +28,7 @@ const Signin = () => {
   const [loading, setLoading] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const [value, setValue] = useState('');
+  const [show, setShow] = useState(false);
 
   //email
   const handleEmail = (e) => {
@@ -59,8 +61,9 @@ const Signin = () => {
         })
       );
       setTimeout(() => {
-        navigate('/');
-      }, 2000);
+        console.log('hello');
+        window.location.href = '/home';
+      }, 1000);
     });
   };
 
@@ -96,11 +99,13 @@ const Signin = () => {
             })
           );
           // ...
-          setLoading(false);
+          setLoading(true);
           setSuccessMsg('Successfully Logged in! Welcome you back!');
           setTimeout(() => {
-            navigate('/');
-          }, 2000);
+            // console.log('world');
+            // navigate('/home');
+            window.location.href = '/home';
+          }, 1000);
         })
         .catch((error) => {
           setLoading(false);
@@ -117,6 +122,7 @@ const Signin = () => {
       setPassword('');
     }
   };
+
   return (
     <div className='w-full'>
       <div className='w-full bg-white pb-10 '>
@@ -177,6 +183,29 @@ const Signin = () => {
                 >
                   Continue
                 </button>
+                <p className='w-full text-xs text-gray-600 mt-1 flex items-center '>
+                  <span className='w-1/3 h-[1px] bg-zinc-400 inline-flex'></span>
+                  <span className='w-1/3 text-center'>New User</span>
+                  <span className='w-1/3 h-[1px] bg-zinc-400 inline-flex'></span>
+                </p>
+                <Link to='/registration'>
+                  <button className='w-full p-3 -mt-2 text-sm font-normal rounded-sm bg-[#f0c14b]   active:border-yellow-800 active:shadow-amazonInput'>
+                    Create Your Account
+                  </button>
+                </Link>
+                <p className='w-full text-xs text-gray-600 -mt-2 flex items-center '>
+                  <span className='w-1/3 h-[1px] bg-zinc-400 inline-flex'></span>
+                  <span className='w-1/3 text-center'>Or</span>
+                  <span className='w-1/3 h-[1px] bg-zinc-400 inline-flex'></span>
+                </p>
+                <div className=' flex justify-center items-center rounded'>
+                  <button
+                    onClick={handleSignInWithPopup}
+                    className='w-full -mt-3 py-1.5 text-sm font-normal rounded-sm bg-[#f0c14b]  active:border-yellow-800 active:shadow-amazonInput'
+                  >
+                    Sign-in with Google
+                  </button>
+                </div>
                 {loading && (
                   <div className='flex justify-center'>
                     <RotatingLines
@@ -189,54 +218,30 @@ const Signin = () => {
                   </div>
                 )}
               </div>
-              <div className=' flex justify-center items-center rounded'>
-                <button
-                  onClick={handleSignInWithPopup}
-                  className='border-1 border-white p-2 rounded mb-3 text-base'
-                >
-                  Sign-in with Google
-                </button>
-              </div>
             </div>
-            <p className='w-full text-xs text-gray-600 mt-4 flex items-center '>
-              <span className='w-1/3 h-[1px] bg-zinc-400 inline-flex'></span>
-              <span className='w-1/3 text-center'>New to Amazon</span>
-              <span className='w-1/3 h-[1px] bg-zinc-400 inline-flex'></span>
-            </p>
-            <Link to='/registration'>
-              <button className='w-full p-3 mt-4 text-sm font-normal rounded-sm bg-[#f0c14b]   active:border-yellow-800 active:shadow-amazonInput'>
-                Create Your Account
-              </button>
-            </Link>
           </form>
         )}
+        <div className='flex   justify-center items-center mt-2 '>
+          <button
+            className='px-2  py-1.5  text-sm font-normal rounded-sm bg-[#f0c14b]  active:border-yellow-800 active:shadow-amazonInput  mb-1'
+            onClick={() => setShow(!show)}
+          >
+            View Test Credential
+          </button>
+          {show ? (
+            <div className=' flex flex-col  border-1 px-3 bg-blue-100 ml-3  border-blue-400 rounded mb-3'>
+              <p>
+                <span className='font-semibold '>Email :</span> test1@gmail.com
+              </p>
+              <p className='-mt-1'>
+                <span className='font-semibold  '>Password :</span> 121212
+              </p>
+            </div>
+          ) : null}
+        </div>
       </div>
     </div>
   );
 };
 
 export default Signin;
-
-{
-  /* <div className=' flex justify-center items-center rounded'>
-  <button
-    onClick={handleSignInWIthPopup}
-    className='border-1 border-white p-2 rounded mb-3 text-base'
-  >
-    Sign-in with Google
-  </button>
-</div>; 
-  const handleSignInWIthPopup = (user) => {
-    signInWithPopup(auth, provider).then((data) => {
-      setValue(data.user.email);
-      localStorage.setItem('email', data.user.email);
-      setTimeout(() => {
-        navigate('/home');
-      }, 1500);
-      toast.success('Login Successfully');
-    });
-  };
-  useEffect(() => {
-    setValue(localStorage.getItem('email'));
-  });*/
-}

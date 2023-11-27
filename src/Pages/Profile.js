@@ -20,6 +20,7 @@ const Profile = () => {
 
   useEffect(() => {
     id && getSingleUser();
+    console.log(data);
   }, [id]);
 
   const getSingleUser = async () => {

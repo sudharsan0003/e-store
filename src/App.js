@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -17,24 +17,13 @@ import Signin from './Pages/Signin';
 import Cart from './Pages/Cart';
 import Registration from './Pages/Registration';
 import Profile from './Pages/Profile';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Navigate } from 'react-router-dom';
+import { auth } from './firebase.config';
 
 const Layout = () => {
   return (
     <div>
       <Header />
-      <ToastContainer
-        position='top-right'
-        autoClose={1000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={true}
-        pauseOnFocusLoss
-        Draggable
-        pauseOnHovertheme='colored'
-      />
       <ScrollRestoration />
       <Outlet />
       <Footer />
@@ -43,13 +32,35 @@ const Layout = () => {
 };
 
 const App = () => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    auth.onAuthStateChanged((authUser) => {
+      if (authUser) {
+        setUser(authUser);
+      } else {
+        setUser(null);
+      }
+    });
+  }, []);
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route>
         <Route path='/' element={<Layout />}>
-          <Route index element={<Home />} loader={productData}></Route>
-          <Route path='/cart' element={<Cart />}></Route>
-          <Route path='/signin' element={<Signin />}></Route>
+          <Route
+            path='/cart'
+            element={user && user.uid ? <Cart /> : <Navigate to='/' />}
+          ></Route>
+          <Route
+            path='/home'
+            element={user && user.uid ? <Home /> : <Navigate to='/' />}
+            loader={productData}
+          ></Route>
+          <Route
+            path='/'
+            element={user && user.uid ? <Navigate to='/home' /> : <Signin />}
+          ></Route>
           <Route path='/registration' element={<Registration />}></Route>
           <Route path='/profile' element={<Profile />}></Route>
           <Route path='/registration/:id' element={<Registration />} />

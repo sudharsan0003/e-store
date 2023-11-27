@@ -124,7 +124,7 @@ const Registration = () => {
       );
       localStorage.setItem('token', user.accessToken);
       localStorage.setItem('user', JSON.stringify(user));
-      navigate('/');
+      navigate('/home');
     } catch (error) {
       console.log(error);
     }
@@ -151,7 +151,7 @@ const Registration = () => {
         console.log(error);
       }
     }
-    navigate('/');
+    navigate('/home');
   };
 
   return (
