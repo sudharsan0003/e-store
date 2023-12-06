@@ -11,7 +11,7 @@ import { RotatingLines } from 'react-loader-spinner';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setUserInfo } from '../redux/amazonSlice';
+import { setUserInfo, setUseruid } from '../redux/amazonSlice';
 import { ToastContainer, toast } from 'react-toastify';
 
 const Signin = () => {
@@ -96,7 +96,8 @@ const Signin = () => {
               userName: user.displayName,
               email: user.email,
               image: user.photoURL,
-            })
+            }),
+            setUseruid(user.uid)
           );
           // ...
           setLoading(true);

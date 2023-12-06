@@ -20,7 +20,7 @@ const Header = () => {
   const [showAll, setShowAll] = useState(false);
   const products = useSelector((state) => state.amazon.products);
   const userInfo = useSelector((state) => state.amazon.userInfo);
-  console.log(userInfo);
+
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
