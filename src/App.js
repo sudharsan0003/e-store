@@ -13,12 +13,15 @@ import Header from './Components/Header/Header';
 import Footer from './Components/Footer/Footer';
 import Home from './Pages/Home';
 import { productData } from './Api/Api';
-import Signin from './Pages/Signin';
+import Login from './Pages/Login';
 import Cart from './Pages/Cart';
 import Registration from './Pages/Registration';
 import Profile from './Pages/Profile';
 import { Navigate } from 'react-router-dom';
 import { auth } from './firebase.config';
+import { ToastContainer } from 'react-toastify';
+import Product from './Components/Home/Product';
+import About from './Pages/About';
 
 const Layout = () => {
   return (
@@ -52,26 +55,34 @@ const App = () => {
             path='/cart'
             element={user && user.uid ? <Cart /> : <Navigate to='/' />}
           ></Route>
-          <Route
-            path='/home'
-            element={user && user.uid ? <Home /> : <Navigate to='/' />}
-            loader={productData}
-          ></Route>
-          <Route
-            path='/'
-            element={user && user.uid ? <Navigate to='/home' /> : <Signin />}
-          ></Route>
+          <Route path='/home' element={<Home />} loader={productData}></Route>
+          <Route path='/header' element={<Header />} user={user}></Route>
+          <Route path='/' element={<Login />}></Route>
           <Route path='/registration' element={<Registration />}></Route>
           <Route path='/profile' element={<Profile />}></Route>
           <Route path='/registration/:id' element={<Registration />} />
+          <Route path='/about' element={<About />} />
         </Route>
       </Route>
     )
   );
   return (
-    <div className='font-bodyFont bg-gray-100'>
-      <RouterProvider router={router}></RouterProvider>
-    </div>
+    <>
+      <ToastContainer
+        position='top-left'
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        Draggable
+        pauseOnHovertheme='light'
+      />
+      <div className='font-bodyFont bg-gray-100'>
+        <RouterProvider router={router}></RouterProvider>
+      </div>
+    </>
   );
 };
 

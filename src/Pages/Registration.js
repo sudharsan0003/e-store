@@ -1,446 +1,201 @@
-import React, { useState, useEffect } from 'react';
-import { storage, db, auth } from '../firebase.config';
-import { useParams, useNavigate, Navigate, json } from 'react-router-dom';
-import {
-  CollectionReference,
-  addDoc,
-  collection,
-  serverTimestamp,
-  doc,
-  getDoc,
-  updateDoc,
-} from 'firebase/firestore';
-import { getDownloadURL, uploadBytesResumable, ref } from 'firebase/storage';
-import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
-import { useDispatch } from 'react-redux';
-import { setUserInfo } from '../redux/amazonSlice';
-
-const initialState = {
-  name: '',
-  mail: '',
-  city: '',
-  contact: '',
-  password: '',
-};
+import { AiOutlineSend } from 'react-icons/ai';
+import { useState } from 'react';
+import { NavLink, useNavigate, Link } from 'react-router-dom';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { setProfileData } from '../utils/firebaseFunction';
+import { storage, auth } from '../firebase.config';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { UserConsumer } from '../context/userContext';
 
 const Registration = () => {
-  const [data, setData] = useState(initialState);
-  const { name, mail, city, contact, password } = data;
-  const [file, setFile] = useState(null);
-  const [progress, setProgress] = useState(null);
-  const [error, setError] = useState({});
-  const [isSubmit, setIsSubmit] = useState(false);
+  const { fetchProfileData } = UserConsumer();
   const navigate = useNavigate();
-  const { id } = useParams();
-  const dispatch = useDispatch();
-  // const userInfo = useSelector((state) => state.amazon.userInfo);
+  const [userName, setUserName] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [number, setNumber] = useState();
+  const [gender, setGender] = useState();
+  const [imageURL, setImageURL] = useState();
 
-  useEffect(() => {
-    id && getSingleUser();
-  }, [id]);
-
-  const getSingleUser = async () => {
-    const docRef = doc(db, 'users', id);
-    const snapshot = await getDoc(docRef);
-    if (snapshot.exists()) {
-      setData({ ...snapshot.data() });
-    }
-  };
-
-  useEffect(() => {
-    const uploadFile = () => {
-      const name = new Date().getTime() + file.name;
-      const storageRef = ref(storage, file.name);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setProgress(progress);
-          switch (snapshot.state) {
-            case 'paused':
-              console.log('upload is pause ');
-              break;
-            case 'running':
-              console.log('upload is running ');
-              break;
-            default:
-              break;
-          }
-        },
-        (error) => {
-          console.log(error);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            setData((prev) => ({ ...prev, img: downloadURL }));
-          });
+  const onSubmit = async () => {
+    await createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+      })
+      .catch((err) => {
+        if (err.code === 'auth/email-already-in-use') {
+          alert('Email already exist');
+          navigate('/');
+          toast.warning('Email already exist');
         }
-      );
-    };
-    file && uploadFile();
-  }, [file]);
-
-  const handleChange = (e) => {
-    setData({ ...data, [e.target.name]: e.target.value });
+      });
   };
 
-  const validate = () => {
-    let error = {};
-    if (!name) {
-      error.name = 'kjh';
-    }
-    if (!mail) {
-      error.mail = '***khb';
-    }
-    if (!city) {
-      error.city = '********';
-    }
-    if (!contact) {
-      error.contact = '********';
-    }
+  const getImageUrl = (event) => {
+    const imageFile = event.target.files[0];
+    const storageRef = ref(
+      storage,
+      `usersImage/${Date.now()}/${imageFile.name}`
+    );
+    const uploadTask = uploadBytesResumable(storageRef, imageFile);
 
-    return error;
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        switch (snapshot.state) {
+          case 'paused':
+            toast.info('Upload is Paused!');
+            break;
+          case 'running':
+            toast.warning('Waiting for Image Upload!!');
+            break;
+        }
+      },
+      (error) => {
+        console.log('Error', error);
+        toast.error('Error... Try Again!');
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setImageURL(downloadURL);
+          toast.success('Image Uploaded Successfully!');
+        });
+      }
+    );
   };
 
-  const handleSubmit = async (e) => {
+  const formValidation = (e) => {
     e.preventDefault();
-    try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        mail,
-        password
-      );
-      console.log(userCredential);
-      const user = userCredential.user;
-      dispatch(
-        setUserInfo({
-          _id: user.uid,
-          userName: user.displayName,
-          email: user.email,
-          image: user.photoURL,
-        })
-      );
-      localStorage.setItem('token', user.accessToken);
-      localStorage.setItem('user', JSON.stringify(user));
-      navigate('/home');
-    } catch (error) {
-      console.log(error);
-    }
+    if (userName && email && password && number && gender && imageURL) {
+      if (number.length === 10) {
+        const data = {
+          id: Date.now(),
+          userName,
+          email,
+          password,
+          number,
+          gender,
+          image: imageURL,
+        };
+        setProfileData(data);
+        fetchProfileData();
+        onSubmit();
+        clearFormInput();
+      } else toast.warning('Enter valid phone number !');
+      setTimeout(() => {
+        navigate('/home');
+      }, 1000);
+    } else toast.warning('Input Field Is Mandatory !');
+  };
 
-    let error = validate();
-    if (Object.keys(error).length) return setError(error);
-    setIsSubmit(true);
-    if (!id) {
-      try {
-        await addDoc(collection(db, 'users'), {
-          ...data,
-          timestamp: serverTimestamp(),
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      try {
-        await updateDoc(doc(db, 'users', id), {
-          ...data,
-          timestamp: serverTimestamp(),
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    navigate('/home');
+  const clearFormInput = () => {
+    setUserName('');
+    setEmail('');
+    setPassword('');
+    setGender('');
+    setNumber('');
+    setImageURL('');
   };
 
   return (
-    <div style={{ backgroundColor: 'beige' }}>
-      <div className='form flex justify-center items-center'>
-        <form className='form flex flex-col justify-center items-center w-[25%] gap-3 mt-10 mb-10  '>
-          <input
-            type='text'
-            placeholder='Name'
-            name='name'
-            error={error.name ? { content: error.name } : null}
-            value={name}
-            onChange={handleChange}
-            className='w-full  py-1 border border-zinc-400 px-2 text-base rounded-sm outline-none focus-within:border-[#e77600] focus-within:shadow-amazonInput '
-          />
-          <input
-            type='email'
-            placeholder='Email'
-            name='mail'
-            error={error.mail ? { content: error.mail } : null}
-            value={mail}
-            onChange={handleChange}
-            className='w-full lowercase py-1 border border-zinc-400 px-2 text-base rounded-sm outline-none focus-within:border-[#e77600] focus-within:shadow-amazonInput '
-          />
-          <input
-            type='text'
-            placeholder='City'
-            error={error.city ? { content: error.city } : null}
-            value={city}
-            name='city'
-            onChange={handleChange}
-            className='w-full  py-1 border border-zinc-400 px-2 text-base rounded-sm outline-none focus-within:border-[#e77600] focus-within:shadow-amazonInput '
-          />
-          <input
-            type='number'
-            name='contact'
-            placeholder='Contact No'
-            error={error.contact ? { content: error.contact } : null}
-            value={contact}
-            onChange={handleChange}
-            className='w-full  py-1 border border-zinc-400 px-2 text-base rounded-sm outline-none focus-within:border-[#e77600] focus-within:shadow-amazonInput '
-          />
-          <input
-            type='password'
-            name='password'
-            value={password}
-            placeholder='Password'
-            onChange={handleChange}
-            className='w-full py-1 border border-zinc-400 px-2 text-base rounded-sm outline-none focus-within:border-[#e77600] focus-within:shadow-amazonInput '
-          />
+    <div className='w-full'>
+      <div className='border-[1px]  my-4  w-[350px] mx-auto flex flex-col items-center text-lg font-semibold text-black bg-orange-300 rounded'>
+        <div>
+          <div className='w-full flex justify-center items-center heading mt-4'>
+            Registration
+          </div>
+        </div>
+        <div className=' text-white font-titleFont text-lg font-semibold px-6 py-2 flex justify-center items-center '>
+          <div className='w-full flex flex-col justify-center items-center heading '>
+            <form className='flex flex-col gap-2' onSubmit={formValidation}>
+              <input
+                type='text'
+                name='name'
+                placeholder='Username'
+                className='w-full  py-1 border border-zinc-400 px-2 text-base rounded-sm outline-none  text-black'
+                value={userName}
+                onChange={(event) => setUserName(event.target.value)}
+              />
+              <input
+                type='email'
+                name='email'
+                placeholder='Email'
+                className='w-full lowercase py-1 border border-zinc-400 px-2 text-base rounded-sm outline-none  text-black'
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+              />
 
-          <input type='file' onChange={(e) => setFile(e.target.files[0])} />
+              <input
+                type='password'
+                name='password'
+                className='w-full py-1 border border-zinc-400 px-2 text-base rounded-sm outline-none  text-black'
+                placeholder='Password'
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+              ></input>
 
-          {/* <button
-            type='submit'
-            onClick={handleSubmit}
-            className='w-full lowercase py-1 border border-zinc-400 px-2 text-base rounded-sm outline-none focus-within:border-[#e77600] focus-within:shadow-amazonInput bg-orange-400'
-          >
-            Submit
-          </button> */}
-          <button
-            type='submit'
-            onClick={handleSubmit}
-            className='w-full  py-1 border border-zinc-400 px-2 text-base rounded-sm outline-none focus-within:border-[#e77600] focus-within:shadow-amazonInput bg-orange-400'
-          >
-            {id ? 'update User' : 'Add User'}
-          </button>
-        </form>
+              <input
+                type='number'
+                name='Contact'
+                className='w-full py-1 border border-zinc-400 px-2 text-base rounded-sm outline-none  text-black'
+                placeholder='Contact'
+                value={number}
+                onChange={(event) => setNumber(event.target.value)}
+              ></input>
+
+              <div className=''>
+                <select
+                  value={gender}
+                  onChange={(e) => setGender(e.target.value)}
+                  id='gender'
+                  placeholder='gender'
+                  className='text-black font-medium text-md'
+                >
+                  <option defaultChecked>Gender</option>
+                  <option value='Male'>Male</option>
+                  <option value='Women'>Women</option>
+                  <option value='Other'>Other</option>
+                </select>
+              </div>
+
+              <div className='signFrom-profilePic'>
+                <input
+                  type='file'
+                  name='image'
+                  accept='image/*'
+                  id='image'
+                  className='border w-[80%]'
+                  onChange={(event) => getImageUrl(event)}
+                />
+              </div>
+
+              <div className='flex justify-center items-center'>
+                <button
+                  type='submit'
+                  className='border bg-white/70 text-black duration-200 hover:scale-105 px-3 mt-2 rounded-md'
+                >
+                  SignUp
+                </button>
+              </div>
+              <div className='flex justify-center items-center font-light text-black'>
+                Already have an account ?{'   '}
+                <span>
+                  <NavLink to='/' className='text-white font-medium'>
+                    Sign In
+                  </NavLink>
+                  <br />
+                </span>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
 export default Registration;
-
-// import React from 'react';
-// import { useState } from 'react';
-// import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-// import { Link, useNavigate } from 'react-router-dom';
-// import { RotatingLines } from 'react-loader-spinner';
-
-// const Registration = () => {
-//   const navigate = useNavigate();
-//   const auth = getAuth();
-
-//   // function
-//   const [clientName, setClientName] = useState('');
-//   const [email, setEmail] = useState('');
-//   const [password, setPassword] = useState('');
-//   const [confirmPassword, setConfirmPassword] = useState('');
-//   //  error
-//   const [errClientName, setErrClientName] = useState('');
-//   const [errEmail, setErrEmail] = useState('');
-//   const [errPassword, setErrPassword] = useState('');
-//   const [errConfirmPassword, setErrConfirmPassword] = useState('');
-//   const [firebaseErr, setFirebaseErr] = useState('');
-//   const [loading, setLoading] = useState('');
-//   const [successMsg, setSuccessMsg] = useState('');
-//   // name function
-//   const handleName = (e) => {
-//     setClientName(e.target.value);
-//     setErrClientName('');
-//   };
-//   // email function
-//   const handleEmail = (e) => {
-//     setEmail(e.target.value);
-//     setErrEmail('');
-//   };
-//   // password function
-//   const handlePassword = (e) => {
-//     setPassword(e.target.value);
-//     setErrPassword('');
-//   };
-//   // cnfrmpassword function
-//   const handleConfirmPassword = (e) => {
-//     setConfirmPassword(e.target.value);
-//     setErrConfirmPassword('');
-//   };
-//   //email validation
-//   function validateEmail(email) {
-//     let re = /\S+@\S+\.\S+/;
-//     return re.test(email);
-//   }
-
-//   // submit function
-//   const clickHandlerRegistration = (e) => {
-//     e.preventDefault();
-//     if (!clientName) {
-//       setErrClientName('Name is mandatory');
-//     }
-//     if (!email) {
-//       setErrEmail('Email is mandatory');
-//       setFirebaseErr('');
-//     } else {
-//       if (!validateEmail(email)) {
-//         setErrEmail('Enter a Valid Email');
-//       }
-//     }
-//     if (!password) {
-//       setErrPassword('Password is mandatory');
-//     } else {
-//       if (password.length < 8) {
-//         setErrPassword('Password must be at least 8 characters');
-//       }
-//     }
-//     if (!confirmPassword) {
-//       setErrConfirmPassword('Confirm Password is mandatory');
-//     } else {
-//       if (confirmPassword !== password) {
-//         setErrConfirmPassword("Password doesn't match");
-//       }
-//     }
-//     if (
-//       clientName &&
-//       email &&
-//       validateEmail(email) &&
-//       password &&
-//       password.length >= 8 &&
-//       confirmPassword &&
-//       confirmPassword === password
-//     ) {
-//       setLoading(true);
-//       createUserWithEmailAndPassword(auth, email, password)
-//         .then((userCredential) => {
-//           // Signed up
-//           const user = userCredential.user;
-
-//           setLoading(false);
-//           setSuccessMsg('Account Created Successfully');
-//           setTimeout(() => {
-//             navigate('/signin');
-//           }, 2000);
-//           // ...
-//         })
-//         .catch((error) => {
-//           const errorCode = error.code;
-//           if (errorCode.includes('auth/email-already-in-use')) {
-//             setFirebaseErr('Email Already in use, Try another one');
-//           }
-//           // ..
-//         });
-//     }
-//   };
-
-//   return (
-//     <div className='w-full'>
-//       <div className='w-full bg-white pb-10 '>
-//         <form className='w-[350px] mx-auto flex flex-col items-center '>
-//           <div className='w-full border bg-gray-300 border-zinc-200 p-6 mt-5'>
-//             <h2 className='font-titleFont text-3xl font-medium mb-4 '>
-//               Create Account
-//             </h2>
-//             <div className='flex flex-col gap-3'>
-//               <div className='flex flex-col gap-2'>
-//                 <p className='text-sm font-medium '>Your Name</p>
-//                 <input
-//                   onChange={handleName}
-//                   type='text'
-//                   value={clientName}
-//                   className='w-full  py-1 border border-zinc-400 px-2 text-base rounded-sm outline-none focus-within:border-[#e77600] focus-within:shadow-amazonInput '
-//                 />
-//                 {errClientName && (
-//                   <p className='text-red-500 italic text-[10px] font-semibold items-center gap-2 px-1 -mt-1'>
-//                     {errClientName}
-//                   </p>
-//                 )}
-//               </div>
-//               <div className='flex flex-col gap-2'>
-//                 <p className='text-sm font-medium '>Enter your Email</p>
-//                 <input
-//                   onChange={handleEmail}
-//                   type='email'
-//                   value={email}
-//                   className='w-full lowercase py-1 border border-zinc-400 px-2 text-base rounded-sm outline-none focus-within:border-[#e77600] focus-within:shadow-amazonInput '
-//                 />
-//                 {firebaseErr && (
-//                   <p className='text-red-500 italic text-[10px] font-semibold items-center gap-2 px-1 -mt-1'>
-//                     {firebaseErr}
-//                   </p>
-//                 )}
-//               </div>
-//               <div className='flex flex-col gap-2'>
-//                 <p className='text-sm font-medium '>Password</p>
-//                 <input
-//                   onChange={handlePassword}
-//                   type='password'
-//                   value={password}
-//                   className='w-full  py-1 border border-zinc-400 px-2 text-base rounded-sm outline-none focus-within:border-[#e77600] focus-within:shadow-amazonInput '
-//                 />
-//                 {errPassword && (
-//                   <p className='text-red-500 italic text-[10px] font-semibold items-center gap-2 px-1 -mt-1'>
-//                     {errPassword}
-//                   </p>
-//                 )}
-//               </div>
-//               <div className='flex flex-col gap-2'>
-//                 <p className='text-sm font-medium '>Confirm-Password</p>
-//                 <input
-//                   onChange={handleConfirmPassword}
-//                   type='password'
-//                   value={confirmPassword}
-//                   className='w-full  py-1 border border-zinc-400 px-2 text-base rounded-sm outline-none focus-within:border-[#e77600] focus-within:shadow-amazonInput '
-//                 />
-//                 {errConfirmPassword && (
-//                   <p className='text-red-500 italic text-[10px] font-semibold items-center gap-2 px-1 -mt-1'>
-//                     {errConfirmPassword}
-//                   </p>
-//                 )}
-//               </div>
-//               <p className='text-xs text-gray-500 -mt-2'>
-//                 Password must be atleast 8 character
-//               </p>
-//               <button
-//                 onClick={clickHandlerRegistration}
-//                 className='w-full  py-1.5 text-sm font-normal rounded-sm bg-[#f0c14b]  active:border-yellow-800 active:shadow-amazonInput mt-2'
-//               >
-//                 Continue
-//               </button>
-//               {loading && (
-//                 <div className='flex justify-center'>
-//                   <RotatingLines
-//                     strokeColor='green'
-//                     strokeWidth='5'
-//                     animationDuration='0.75'
-//                     width='50'
-//                     visible={true}
-//                   />
-//                 </div>
-//               )}
-//               {successMsg && (
-//                 <div>
-//                   <p>{successMsg}</p>
-//                 </div>
-//               )}
-//             </div>
-//           </div>
-//         </form>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Registration;
-
-{
-  /* <input
-  onChange={handleEmail}
-  type='email'
-  value={email}
-  className='w-full lowercase py-1 border border-zinc-400 px-2 text-base rounded-sm outline-none focus-within:border-[#e77600] focus-within:shadow-amazonInput '
-/>; */
-}

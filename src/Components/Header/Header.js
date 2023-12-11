@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { getAuth, signOut } from 'firebase/auth';
 import { SiHomeassistantcommunitystore } from 'react-icons/si';
@@ -11,7 +11,11 @@ import Data from '../../Data/Data';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { userSignOut, resetCart } from '../../redux/amazonSlice';
+import { userSignOut } from '../../redux/amazonSlice';
+import { UserConsumer } from '../../context/userContext';
+import { toast } from 'react-toastify';
+import { GrUserAdmin } from 'react-icons/gr';
+import { RiAdminFill } from 'react-icons/ri';
 
 const Header = () => {
   const auth = getAuth();
@@ -19,37 +23,57 @@ const Header = () => {
   const dispatch = useDispatch();
   const [showAll, setShowAll] = useState(false);
   const products = useSelector((state) => state.amazon.products);
-  const userInfo = useSelector((state) => state.amazon.userInfo);
+  const {
+    userName,
+    setUserName,
+    profileData,
+    setProfileData,
+    accessToken,
+    setAccessToken,
+    userProfile,
+    fetchProfileData,
+  } = UserConsumer();
 
   const handleLogout = () => {
-    signOut(auth)
-      .then(() => {
-        dispatch(userSignOut());
-        dispatch(resetCart());
-      })
-      .catch((error) => {});
+    signOut(auth);
+    setProfileData(null);
+    setAccessToken(null);
     navigate('/');
+    toast.error('logout successfully');
   };
+
   return (
     <div className='w-full bg-e_blue text-whiteText px-4 py-3 flex justify-around items-center gap-5 sticky top-0 z-50'>
-      <Link to='/home'>
-        <div className='headerHover flex flex-col'>
-          <SiHomeassistantcommunitystore className='w-24 mt-2' />
-          <span className='text-md font-semibold'>E - Mart</span>
-        </div>
-      </Link>
-
-      <Link to='/'>
-        <div className='flex flex-col items-start justify-center headerHover'>
-          {userInfo ? (
-            <p className='text-sm text-gray-100 font-medium'>
-              {userInfo.email}
+      {accessToken ? (
+        <Link to='/home'>
+          <div className='headerHover flex flex-col'>
+            <SiHomeassistantcommunitystore className='w-24 mt-2' />
+            <span className='text-md font-semibold'>E - Mart</span>
+          </div>
+        </Link>
+      ) : (
+        <Link to='/'>
+          <div className='headerHover flex flex-col'>
+            <SiHomeassistantcommunitystore className='w-24 mt-2' />
+            <span className='text-md font-semibold'>E - Mart</span>
+          </div>
+        </Link>
+      )}
+      {accessToken ? (
+        <Link to='/home'>
+          <div className='flex flex-col items-start justify-center headerHover'>
+            <p className='text-sm text-center font-semibold -mt-1 hidden mdl:inline-flex'>
+              Home
             </p>
-          ) : (
-            <p className='text-xs text-lightText font-light'>Hello,Sign in</p>
-          )}
+          </div>
+        </Link>
+      ) : (
+        ''
+      )}
+      <Link to='/about'>
+        <div className='flex flex-col items-start justify-center headerHover'>
           <p className='text-sm text-center font-semibold -mt-1 hidden mdl:inline-flex'>
-            Accounts
+            About
           </p>
         </div>
       </Link>
@@ -65,24 +89,32 @@ const Header = () => {
         </div>
       </Link>
       <Link to={`/profile`}>
-        {userInfo && (
-          <div>
-            <img
-              className='w-8 h-8 rounded-full '
-              src={
-                userInfo
-                  ? userInfo.image
-                  : 'https://e7.pngegg.com/pngimages/343/677/png-clipart-computer-icons-user-profile-login-my-account-icon-heroes-black-thumbnail.png'
-              }
-              alt='logo'
-            />
-          </div>
-        )}
-      </Link>
-      {userInfo && (
-        <div onClick={handleLogout} className='headerHover '>
-          <LuLogOut className='w-6 h-6' />
+        <div>
+          {accessToken ? (
+            <div className='bg-blue-200 rounded-lg duration-200 hover:scale-125'>
+              <GrUserAdmin size={30} className='p-1' />
+            </div>
+          ) : (
+            <Link to='/'>
+              <div>
+                <RiAdminFill className='cursor-default' />
+                <p className='cursor-default'> Kindly Sign in</p>
+              </div>
+            </Link>
+          )}
         </div>
+      </Link>
+      {accessToken ? (
+        <Link to='/' className='no-underline'>
+          <p
+            className='text-whiteText font-normal text-sm headerHover hover:scale-105'
+            onClick={handleLogout}
+          >
+            <LuLogOut size={20} />
+          </p>
+        </Link>
+      ) : (
+        ''
       )}
     </div>
   );
