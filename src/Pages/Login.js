@@ -8,7 +8,6 @@ const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-  const [isTestBtn, setIsTestBtn] = useState(false);
   const [show, setShow] = useState(false);
   const [value, setValue] = useState('');
 
@@ -18,15 +17,19 @@ const Login = () => {
       localStorage.setItem('email', data.user.email);
       setTimeout(() => {
         navigate('/home');
-      }, 1500);
-      toast.success('Login Successfully');
+      }, 1000);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2500);
+      toast.success('Login Successfully !');
     });
   };
   useEffect(() => {
     setValue(localStorage.getItem('email'));
   });
 
-  const handleAuth = async () => {
+  const handleAuth = async (e) => {
+    e.preventDefault();
     await signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
@@ -36,22 +39,20 @@ const Login = () => {
         setTimeout(() => {
           navigate('/home');
         }, 1000);
+        toast.success('Login successfully  !');
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       })
       .catch((err) => {
-        console.log('Err', err.message);
+        toast.error(
+          'All input field is Mandatory or Invalid Credential Try again !'
+        );
       });
   };
 
-  const handleFinalLogin = (e) => {
-    e.preventDefault();
-    if (email && password) {
-      handleAuth();
-      toast.success('Login Successfully');
-    } else toast.warning('Input Field Is Mandatory !');
-  };
-
   return (
-    <div className='w-full'>
+    <div className='w-full h-screen'>
       <div className=' border-[1px]  mt-4  w-[350px] mx-auto flex flex-col items-center text-black font-semibold text-lg bg-orange-300 rounded '>
         <div>
           <div className='w-full flex justify-center items-center heading mt-4'>
@@ -60,7 +61,7 @@ const Login = () => {
         </div>
         <div className=' text-white font-titleFont text-lg font-semibold px-6 py-2 flex justify-center items-center '>
           <div className='w-full flex flex-col justify-center items-center heading '>
-            <form className='row  ' onSubmit={handleFinalLogin}>
+            <form className='row  ' onSubmit={handleAuth}>
               <div className='col-12 py-3'>
                 <input
                   type='email'

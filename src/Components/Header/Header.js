@@ -1,27 +1,21 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
+import React from 'react';
 import { getAuth, signOut } from 'firebase/auth';
 import { SiHomeassistantcommunitystore } from 'react-icons/si';
-import { RiArrowDropDownLine } from 'react-icons/ri';
 import { LuLogOut } from 'react-icons/lu';
-import { CiLocationOn } from 'react-icons/ci';
-import { FaSearch } from 'react-icons/fa';
 import { HiOutlineShoppingCart } from 'react-icons/hi';
-import Data from '../../Data/Data';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { userSignOut } from '../../redux/amazonSlice';
 import { UserConsumer } from '../../context/userContext';
 import { toast } from 'react-toastify';
 import { GrUserAdmin } from 'react-icons/gr';
 import { RiAdminFill } from 'react-icons/ri';
+import { resetCart } from '../../redux/amazonSlice';
 
 const Header = () => {
   const auth = getAuth();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [showAll, setShowAll] = useState(false);
   const products = useSelector((state) => state.amazon.products);
   const {
     userName,
@@ -38,8 +32,9 @@ const Header = () => {
     signOut(auth);
     setProfileData(null);
     setAccessToken(null);
+    dispatch(resetCart());
     navigate('/');
-    toast.error('logout successfully');
+    toast.success('logout successfully');
   };
 
   return (

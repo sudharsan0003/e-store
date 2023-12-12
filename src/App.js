@@ -29,7 +29,6 @@ const Layout = () => {
       <Header />
       <ScrollRestoration />
       <Outlet />
-      <Footer />
     </div>
   );
 };

@@ -4,7 +4,7 @@ import FooterBottom from './FooterBottom';
 
 const Footer = () => {
   return (
-    <div className='font-titleFont'>
+    <div className='font-titleFont my-3 -mb-10'>
       <FooterBottom />
     </div>
   );

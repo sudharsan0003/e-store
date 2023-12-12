@@ -17,6 +17,7 @@ const Registration = () => {
   const [password, setPassword] = useState();
   const [number, setNumber] = useState();
   const [gender, setGender] = useState();
+  const [city, setCity] = useState();
   const [imageURL, setImageURL] = useState();
 
   const onSubmit = async () => {
@@ -51,7 +52,7 @@ const Registration = () => {
             toast.info('Upload is Paused!');
             break;
           case 'running':
-            toast.warning('Waiting for Image Upload!!');
+            toast.warning('Waiting for Image Upload!');
             break;
         }
       },
@@ -79,6 +80,7 @@ const Registration = () => {
           password,
           number,
           gender,
+          city,
           image: imageURL,
         };
         setProfileData(data);
@@ -89,6 +91,9 @@ const Registration = () => {
       setTimeout(() => {
         navigate('/home');
       }, 1000);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     } else toast.warning('Input Field Is Mandatory !');
   };
 
@@ -97,12 +102,13 @@ const Registration = () => {
     setEmail('');
     setPassword('');
     setGender('');
+    setCity('');
     setNumber('');
     setImageURL('');
   };
 
   return (
-    <div className='w-full'>
+    <div className='w-full h-screen'>
       <div className='border-[1px]  my-4  w-[350px] mx-auto flex flex-col items-center text-lg font-semibold text-black bg-orange-300 rounded'>
         <div>
           <div className='w-full flex justify-center items-center heading mt-4'>
@@ -147,17 +153,33 @@ const Registration = () => {
                 onChange={(event) => setNumber(event.target.value)}
               ></input>
 
-              <div className=''>
+              <div className='w-f flex justify-between'>
                 <select
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
                   id='gender'
-                  placeholder='gender'
+                  placeholder='Gender'
                   className='text-black font-medium text-md'
                 >
                   <option defaultChecked>Gender</option>
                   <option value='Male'>Male</option>
                   <option value='Women'>Women</option>
+                  <option value='Other'>Other</option>
+                </select>
+                <select
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  id='city'
+                  placeholder='City'
+                  className='text-black font-medium text-md'
+                >
+                  <option defaultChecked>City</option>
+                  <option value='Coimbatore'>Coimbatore</option>
+                  <option value='Chennai'>Chennai</option>
+                  <option value='Salem'>Salem</option>
+                  <option value='Trichy'>Trichy</option>
+                  <option value='Chennai'>Madurai</option>
+                  <option value='Tirupur'>Tirupur</option>
                   <option value='Other'>Other</option>
                 </select>
               </div>
