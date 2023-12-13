@@ -20,7 +20,6 @@ import Profile from './Pages/Profile';
 import { Navigate } from 'react-router-dom';
 import { auth } from './firebase.config';
 import { ToastContainer } from 'react-toastify';
-import Product from './Components/Home/Product';
 import About from './Pages/About';
 
 const Layout = () => {
@@ -46,25 +45,39 @@ const App = () => {
     });
   }, []);
 
-  const router = createBrowserRouter(
-    createRoutesFromElements(
-      <Route>
-        <Route path='/' element={<Layout />}>
-          <Route
-            path='/cart'
-            element={user && user.uid ? <Cart /> : <Navigate to='/' />}
-          ></Route>
-          <Route path='/home' element={<Home />} loader={productData}></Route>
-          <Route path='/header' element={<Header />} user={user}></Route>
-          <Route path='/' element={<Login />}></Route>
-          <Route path='/registration' element={<Registration />}></Route>
-          <Route path='/profile' element={<Profile />}></Route>
-          <Route path='/registration/:id' element={<Registration />} />
-          <Route path='/about' element={<About />} />
-        </Route>
-      </Route>
-    )
-  );
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <Layout />,
+      children: [
+        {
+          path: '/',
+          element: <Login />,
+        },
+        {
+          path: '/home',
+          element: <Home />,
+          loader: productData,
+        },
+        {
+          path: '/registration',
+          element: <Registration />,
+        },
+        {
+          path: '/profile',
+          element: <Profile />,
+        },
+        {
+          path: '/cart',
+          element: <Cart />,
+        },
+        {
+          path: '/about',
+          element: <About />,
+        },
+      ],
+    },
+  ]);
   return (
     <>
       <ToastContainer

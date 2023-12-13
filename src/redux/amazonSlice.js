@@ -2,8 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   products: [],
-  userInfo: null,
-  useruid: null,
 };
 
 export const amazonSlice = createSlice({
@@ -36,12 +34,6 @@ export const amazonSlice = createSlice({
     resetCart: (state) => {
       state.products = [];
     },
-    setUserInfo: (state, action) => {
-      state.userInfo = action.payload;
-    },
-    setUseruid: (state, action) => {
-      state.useruid = action.payload;
-    },
     userSignOut: (state) => {
       state.userInfo = null;
     },
@@ -54,8 +46,6 @@ export const {
   resetCart,
   increment,
   decrement,
-  setUserInfo,
   userSignOut,
-  setUseruid,
 } = amazonSlice.actions;
 export default amazonSlice.reducer;

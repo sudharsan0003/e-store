@@ -73,15 +73,29 @@ const Header = () => {
         </div>
       </Link>
       <Link to='/cart'>
-        <div className='flex items-center justify-center headerHover relative  p-2'>
-          <HiOutlineShoppingCart />
-          <p className='text-xs font-semibold  text-whiteText px-3'>
-            Cart
-            <span className='absolute text-xs -top-0.5 left-6 font-semibold p-1 h-4 bg-[#f3a847] text-e_blue rounded-full flex justify-center items-center'>
-              {products.length > 0 ? products.length : 0}
-            </span>
-          </p>
-        </div>
+        {accessToken ? (
+          <div className='flex items-center justify-center headerHover relative  p-2'>
+            <HiOutlineShoppingCart />
+            <p className='text-xs font-semibold  text-whiteText px-3'>
+              Cart
+              <span className='absolute text-xs -top-0.5 left-6 font-semibold p-1 h-4 bg-[#f3a847] text-e_blue rounded-full flex justify-center items-center'>
+                {products.length > 0 ? products.length : 0}
+              </span>
+            </p>
+          </div>
+        ) : (
+          <Link to='/'>
+            <div className='flex items-center justify-center headerHover relative  p-2'>
+              <HiOutlineShoppingCart />
+              <p className='text-xs font-semibold  text-whiteText px-3'>
+                Cart
+                <span className='absolute text-xs -top-0.5 left-6 font-semibold p-1 h-4 bg-[#f3a847] text-e_blue rounded-full flex justify-center items-center'>
+                  {products.length > 0 ? products.length : 0}
+                </span>
+              </p>
+            </div>
+          </Link>
+        )}
       </Link>
       <Link to={`/profile`}>
         <div>
