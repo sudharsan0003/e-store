@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { auth, provider } from '../firebase.config';
 import { toast } from 'react-toastify';
+import Spinner from '../Components/spinner/spinner';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -10,6 +11,7 @@ const Login = () => {
   const [password, setPassword] = useState();
   const [show, setShow] = useState(false);
   const [value, setValue] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const handleLogin = (user) => {
     signInWithPopup(auth, provider).then((data) => {
@@ -46,7 +48,7 @@ const Login = () => {
       })
       .catch((err) => {
         toast.error(
-          'All input field is Mandatory or Invalid Credential Try again !'
+          'All input fields are Mandatory or Invalid Credential Try again !'
         );
       });
   };
@@ -135,7 +137,7 @@ const Login = () => {
               <span className='font-semibold '>Email :</span> test@gmail.com
             </p>
             <p className='-mt-1'>
-              <span className='font-semibold  '>Password :</span> 12121212
+              <span className='font-semibold  '>Password :test@123</span>
             </p>
           </div>
         ) : null}

@@ -1,4 +1,3 @@
-import { AiOutlineSend } from 'react-icons/ai';
 import { useState } from 'react';
 import { NavLink, useNavigate, Link } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';

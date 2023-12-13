@@ -9,7 +9,7 @@ const Home = () => {
       <Banner />
       <div className='w-full -mt-32  py-10'>
         <Product />
-        <Footer/>
+        <Footer />
       </div>
     </div>
   );

@@ -83,7 +83,6 @@ const UserProvider = ({ children }) => {
         setEmail(user.providerData[0].email);
       }
     });
-
     return subscriber;
   }, []);
 
