@@ -10,7 +10,6 @@ import {
   ScrollRestoration,
 } from 'react-router-dom';
 import Header from './Components/Header/Header';
-import Footer from './Components/Footer/Footer';
 import Home from './Pages/Home';
 import { productData } from './Api/Api';
 import Login from './Pages/Login';
@@ -51,11 +50,11 @@ const App = () => {
       element: <Layout />,
       children: [
         {
-          path: '/',
+          path: '/login',
           element: <Login />,
         },
         {
-          path: '/home',
+          path: '/',
           element: <Home />,
           loader: productData,
         },

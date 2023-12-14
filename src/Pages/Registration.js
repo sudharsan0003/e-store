@@ -23,11 +23,12 @@ const Registration = () => {
     await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
+        navigate('/');
       })
       .catch((err) => {
         if (err.code === 'auth/email-already-in-use') {
           alert('Email already exist');
-          navigate('/');
+          navigate('/registration');
           toast.warning('Email already exist');
         }
       });
@@ -88,7 +89,7 @@ const Registration = () => {
         clearFormInput();
       } else toast.warning('Enter valid phone number !');
       setTimeout(() => {
-        navigate('/home');
+        navigate('/');
       }, 1000);
       setTimeout(() => {
         window.location.reload();
@@ -205,7 +206,7 @@ const Registration = () => {
               <div className='flex justify-center items-center font-light text-black'>
                 Already have an account ?{'   '}
                 <span>
-                  <NavLink to='/' className='text-white font-medium'>
+                  <NavLink to='/login' className='text-white font-medium'>
                     Sign In
                   </NavLink>
                   <br />

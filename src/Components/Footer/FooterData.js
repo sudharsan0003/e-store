@@ -8,7 +8,7 @@ const FooterData = () => {
         <h3 className='font-titleFont text-white text-base font-semibold mb-3'>
           Get To Know Us
         </h3>
-        <Link to='/home'>
+        <Link to='/'>
           <ul className='flex flex-col gap-2 font-bodyFont'>
             <li className='footerLink'>Careers</li>
             <li className='footerLink'> Blog</li>
@@ -22,7 +22,7 @@ const FooterData = () => {
         <h3 className='font-titleFont text-white text-base font-semibold mb-3'>
           Work With Us
         </h3>
-        <Link to='/home'>
+        <Link to='/'>
           <ul className='flex flex-col gap-2 font-bodyFont'>
             <li className='footerLink'>Sell Products</li>
             <li className='footerLink'>Bussiness</li>
@@ -37,7 +37,7 @@ const FooterData = () => {
         <h3 className='font-titleFont text-white text-base font-semibold mb-3'>
           Payment Products
         </h3>
-        <Link to='/home'>
+        <Link to='/'>
           <ul className='flex flex-col gap-2 font-bodyFont'>
             <li className='footerLink'>Bussiness Card</li>
             <li className='footerLink'>Reward Point</li>
@@ -50,7 +50,7 @@ const FooterData = () => {
         <h3 className='font-titleFont text-white text-base font-semibold mb-3'>
           Let us Help
         </h3>
-        <Link to='/home'>
+        <Link to='/'>
           <ul className='flex flex-col gap-2 font-bodyFont'>
             <li className='footerLink'>Your Account</li>
             <li className='footerLink'>Your Order</li>

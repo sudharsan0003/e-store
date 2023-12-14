@@ -22,7 +22,7 @@ const Cart = () => {
     setSuccessMsg('Your Order has been Placed');
     setTimeout(() => {
       dispatch(resetCart());
-      navigate('/home');
+      navigate('/');
     }, 2000);
   };
 

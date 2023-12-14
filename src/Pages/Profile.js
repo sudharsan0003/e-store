@@ -49,7 +49,7 @@ const Profile = () => {
           });
           fetchProfileData();
           toast.success('Profile Update Successfully !');
-          navigate('/home');
+          navigate('/');
         } catch (error) {
           console.log(error);
         }

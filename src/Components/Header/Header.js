@@ -33,21 +33,21 @@ const Header = () => {
     setProfileData(null);
     setAccessToken(null);
     dispatch(resetCart());
-    navigate('/');
+    navigate('/login');
     toast.success('logout successfully');
   };
 
   return (
     <div className='w-full bg-e_blue text-whiteText px-4 py-3 flex justify-around items-center gap-5 sticky top-0 z-50'>
       {accessToken ? (
-        <Link to='/home'>
+        <Link to='/'>
           <div className='headerHover flex flex-col'>
             <SiHomeassistantcommunitystore className='w-24 mt-2' />
             <span className='text-md font-semibold'>E - Mart</span>
           </div>
         </Link>
       ) : (
-        <Link to='/'>
+        <Link to='/login'>
           <div className='headerHover flex flex-col'>
             <SiHomeassistantcommunitystore className='w-24 mt-2' />
             <span className='text-md font-semibold'>E - Mart</span>
@@ -55,7 +55,7 @@ const Header = () => {
         </Link>
       )}
       {accessToken ? (
-        <Link to='/home'>
+        <Link to='/'>
           <div className='flex flex-col items-start justify-center headerHover'>
             <p className='text-sm text-center font-semibold -mt-1 hidden mdl:inline-flex'>
               Home
@@ -84,7 +84,7 @@ const Header = () => {
             </p>
           </div>
         ) : (
-          <Link to='/'>
+          <Link to='/login'>
             <div className='flex items-center justify-center headerHover relative  p-2'>
               <HiOutlineShoppingCart />
               <p className='text-xs font-semibold  text-whiteText px-3'>
@@ -104,7 +104,7 @@ const Header = () => {
               <GrUserAdmin size={30} className='p-1' />
             </div>
           ) : (
-            <Link to='/'>
+            <Link to='/login'>
               <div>
                 <RiAdminFill className='cursor-default' />
                 <p className='cursor-default'> Kindly Sign in</p>
@@ -114,7 +114,7 @@ const Header = () => {
         </div>
       </Link>
       {accessToken ? (
-        <Link to='/' className='no-underline'>
+        <Link to='/login' className='no-underline'>
           <p
             className='text-whiteText font-normal text-sm headerHover hover:scale-105'
             onClick={handleLogout}

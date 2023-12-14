@@ -3,7 +3,6 @@ import { useNavigate, Link } from 'react-router-dom';
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { auth, provider } from '../firebase.config';
 import { toast } from 'react-toastify';
-import Spinner from '../Components/spinner/spinner';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -11,14 +10,13 @@ const Login = () => {
   const [password, setPassword] = useState();
   const [show, setShow] = useState(false);
   const [value, setValue] = useState('');
-  const [loading, setLoading] = useState(true);
 
   const handleLogin = (user) => {
     signInWithPopup(auth, provider).then((data) => {
       setValue(data.user.email);
       localStorage.setItem('email', data.user.email);
       setTimeout(() => {
-        navigate('/home');
+        navigate('/');
       }, 1000);
       setTimeout(() => {
         window.location.reload();
@@ -39,7 +37,7 @@ const Login = () => {
         setEmail('');
         setPassword('');
         setTimeout(() => {
-          navigate('/home');
+          navigate('/');
         }, 1000);
         toast.success('Login successfully  !');
         setTimeout(() => {

@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import Banner from '../Components/Home/Banner';
 import Product from '../Components/Home/Product';
 import Footer from '../Components/Footer/Footer';
