@@ -17,16 +17,7 @@ const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const products = useSelector((state) => state.amazon.products);
-  const {
-    userName,
-    setUserName,
-    profileData,
-    setProfileData,
-    accessToken,
-    setAccessToken,
-    userProfile,
-    fetchProfileData,
-  } = UserConsumer();
+  const { setProfileData, accessToken, setAccessToken } = UserConsumer();
 
   const handleLogout = () => {
     signOut(auth);

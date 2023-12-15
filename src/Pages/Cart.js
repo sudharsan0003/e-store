@@ -4,6 +4,7 @@ import { AiOutlineDelete } from 'react-icons/ai';
 import { TiTickOutline } from 'react-icons/ti';
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import {
   deleteItem,
   resetCart,
@@ -19,7 +20,7 @@ const Cart = () => {
   const navigate = useNavigate();
 
   const notify = () => {
-    setSuccessMsg('Your Order has been Placed');
+    toast.success('Your Order has been Placed');
     setTimeout(() => {
       dispatch(resetCart());
       navigate('/');

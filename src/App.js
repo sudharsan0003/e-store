@@ -16,7 +16,6 @@ import Login from './Pages/Login';
 import Cart from './Pages/Cart';
 import Registration from './Pages/Registration';
 import Profile from './Pages/Profile';
-import { Navigate } from 'react-router-dom';
 import { auth } from './firebase.config';
 import { ToastContainer } from 'react-toastify';
 import About from './Pages/About';

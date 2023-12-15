@@ -3,21 +3,17 @@ import { Link, useLoaderData } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../redux/amazonSlice';
 import { UserConsumer } from '../../context/userContext';
+import { toast } from 'react-toastify';
 
 const Product = () => {
   const dispatch = useDispatch();
   const data = useLoaderData();
   const productData = data.data;
-  const {
-    userName,
-    setUserName,
-    profileData,
-    setProfileData,
-    accessToken,
-    setAccessToken,
-    userProfile,
-    fetchProfileData,
-  } = UserConsumer();
+  const { accessToken } = UserConsumer();
+
+  const toastMsg = () => {
+    toast.success('Kindly Login to add items to the cart');
+  };
 
   return (
     <div className='max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6 xl:gap-10 px-4'>
@@ -73,8 +69,11 @@ const Product = () => {
               </button>
             ) : (
               <Link to='/login'>
-                <button className='w-3/4 absolute bottom-2 left-7 py-1.5 rounded-md mt-3 font-titleFont font-medium text-base bg-gradient-to-tr from-yellow-400 to-yellow-200 border border-yellow-500 hover:border-yellow-700 hover:from-yellow-300 to hover:to-yellow-400 active:bg-gradient-to-bl active:from-yellow-400 active:to-yellow-500 duration-200'>
-                  Click here to Signin
+                <button
+                  className='w-3/4 absolute bottom-2 left-7 py-1.5 rounded-md mt-3 font-titleFont font-medium text-base bg-gradient-to-tr from-yellow-400 to-yellow-200 border border-yellow-500 hover:border-yellow-700 hover:from-yellow-300 to hover:to-yellow-400 active:bg-gradient-to-bl active:from-yellow-400 active:to-yellow-500 duration-200'
+                  onClick={toastMsg}
+                >
+                  Add to Cart
                 </button>
               </Link>
             )}
