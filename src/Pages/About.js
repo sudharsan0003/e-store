@@ -4,25 +4,36 @@ const About = () => {
   return (
     <div className='container padding'>
       <div className='col-md-12'>
-        <div className='row mx-0'>
+        <div className='row ml-10 '>
+          <h2 className='text-orange-400'>About Us:</h2>
+
+          <p className='my-5'>
+            At our Firm believe in more than just selling products; we believe
+            in creating experiences, fostering connections, and bringing joy to
+            our customers. Our journey began 1964 with a vision.
+          </p>
+
+          <div className='w-2/4 my-3'>
+            <img
+              src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXdzhmDdQY1gLGCf9pGXllMjVONn5EQT8d7A&usqp=CAU'
+              alt=''
+            />
+          </div>
           <p>
-            Contrary to popular belief, Lorem Ipsum is not simply random text.
-            It has roots in a piece of classical Latin literature from 45 BC,
-            making it over 2000 years old. Richard McClintock, a Latin professor
-            at Hampden-Sydney College in Virginia, looked up one of the more
-            obscure Latin words, consectetur, from a Lorem Ipsum passage, and
-            going through the cites of the word in classical literature,
-            discovered the undoubtable source. Lorem Ipsum comes from sections
-            1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes
-            of Good and Evil) by Cicero, written in 45 BC. This book is a
-            treatise on the theory of ethics, very popular during the
-            Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit
-            amet..", comes from a line in section 1.10.32. The standard chunk of
-            Lorem Ipsum used since the 1500s is reproduced below for those
-            interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et
-            Malorum" by Cicero are also reproduced in their exact original form,
-            accompanied by English versions from the 1914 translation by H.
-            Rackham.
+            Meet our Team Behind passionate individuals who bring a diverse
+            range of skills and experiences to the table. From executive members
+            of our teams dedicated level of their hard works and achivements,
+            each member plays a crucial role in making our Firm in a leading
+            position.
+          </p>
+
+          <p className='my-5'>
+            Join Us on Our Journey Thank you for being a part of the community.
+            Whether you're a longtime customer or just discovering us, we invite
+            you to join us on our journey. Explore our products and experience
+            the difference. Feel free to [contact us/reach out] if you have any
+            questions, feedback, or just want to say hello. We look forward to
+            serving you and building lasting connections. Happy shopping!
           </p>
         </div>
       </div>

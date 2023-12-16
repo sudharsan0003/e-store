@@ -58,9 +58,7 @@ const Header = () => {
       )}
       <Link to='/about'>
         <div className='flex flex-col items-start justify-center headerHover'>
-          <p className='text-sm text-center font-semibold -mt-1 hidden mdl:inline-flex'>
-            About
-          </p>
+          <p className='text-sm text-center font-semibold -mt-1 '>About</p>
         </div>
       </Link>
       <Link to='/cart'>

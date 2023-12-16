@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   createBrowserRouter,
-  createRoutesFromElements,
   Outlet,
-  Link,
-  Route,
-  Routes,
   RouterProvider,
   ScrollRestoration,
 } from 'react-router-dom';
