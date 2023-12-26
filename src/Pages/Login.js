@@ -12,9 +12,8 @@ const Login = () => {
   const [value, setValue] = useState('');
 
   const handleLogin = (user) => {
-    signInWithPopup(auth, provider).then((data) => {
-      setValue(data.user.email);
-      localStorage.setItem('email', data.user.email);
+    signInWithPopup(auth, provider).then((userCredential) => {
+      const user = userCredential.user;
       setTimeout(() => {
         navigate('/');
       }, 1000);

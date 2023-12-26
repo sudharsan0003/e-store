@@ -10,6 +10,7 @@ const UserContext = createContext();
 const UserProvider = ({ children }) => {
   const [accessToken, setAccessToken] = useState(null);
   const [profileData, setProfileData] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
   const [id, setId] = useState();
   const [userName, setUserName] = useState();
   const [email, setEmail] = useState();
@@ -17,6 +18,7 @@ const UserProvider = ({ children }) => {
   const [gender, setGender] = useState();
   const [city, setCity] = useState();
   const [imageURL, setImageURL] = useState();
+  const [profile, setProfile] = useState(null);
 
   const getImageUrl = (event) => {
     const imageFile = event.target.files[0];
@@ -62,13 +64,26 @@ const UserProvider = ({ children }) => {
   const userProfile = () => {
     const filterUser = profileData.find((item) => item.email === email);
     if (filterUser) {
-      setId(filterUser.id);
-      setEmail(filterUser.email);
-      setUserName(filterUser.userName);
-      setGender(filterUser.gender);
-      setCity(filterUser.city);
-      setImageURL(filterUser.image);
-      setNumber(filterUser.number);
+      if (filterUser === 'undefined') {
+        setIsEditing(false);
+        setId('nill');
+        setEmail('nill');
+        setUserName('nill');
+        setGender('nill');
+        setCity('nill');
+        setImageURL('nill');
+        setNumber('nill');
+      } else {
+        setIsEditing(true);
+        setProfile(filterUser.id);
+        setId(filterUser.id);
+        setEmail(filterUser.email);
+        setUserName(filterUser.userName);
+        setGender(filterUser.gender);
+        setCity(filterUser.city);
+        setImageURL(filterUser.image);
+        setNumber(filterUser.number);
+      }
     }
   };
 
@@ -106,6 +121,8 @@ const UserProvider = ({ children }) => {
         getImageUrl,
         id,
         setId,
+        isEditing,
+        profile,
         userProfile,
         profileData,
         fetchProfileData,
