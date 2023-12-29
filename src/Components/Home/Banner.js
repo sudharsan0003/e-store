@@ -41,6 +41,7 @@ const Banner = () => {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}
+          className='-mt-10'
         >
           {' '}
           {dots}{' '}
@@ -85,7 +86,7 @@ const Banner = () => {
   };
 
   return (
-    <div className='w-full'>
+    <div className='w-full z-0'>
       <div className='w-full h-full relative'>
         <Slider {...settings}>
           <div>

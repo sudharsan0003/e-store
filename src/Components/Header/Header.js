@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import { GrUserAdmin } from 'react-icons/gr';
 import { RiAdminFill } from 'react-icons/ri';
 import { resetCart } from '../../redux/amazonSlice';
+import Searchbar from '../Search/Searchbar';
 
 const Header = () => {
   const auth = getAuth();
@@ -29,7 +30,7 @@ const Header = () => {
   };
 
   return (
-    <div className='w-full bg-e_blue text-whiteText px-4 py-3 flex justify-around items-center gap-5 sticky top-0 z-50'>
+    <div className='w-full bg-e_blue text-whiteText px-2 py-2 flex justify-around items-center gap-0 sticky top-0 z-50 md:gap-5'>
       {accessToken ? (
         <Link to='/'>
           <div className='headerHover flex flex-col'>
@@ -45,19 +46,10 @@ const Header = () => {
           </div>
         </Link>
       )}
-      {accessToken ? (
-        <Link to='/'>
-          <div className='flex flex-col items-start justify-center headerHover'>
-            <p className='text-sm text-center font-semibold -mt-1 hidden mdl:inline-flex'>
-              Home
-            </p>
-          </div>
-        </Link>
-      ) : (
-        ''
-      )}
+      {/* {accessToken ? <Searchbar /> : ''} */}
+
       <Link to='/about'>
-        <div className='flex flex-col items-start justify-center headerHover'>
+        <div className=' items-start justify-center headerHover hidden md:inline-flex'>
           <p className='text-sm text-center font-semibold -mt-1 '>About</p>
         </div>
       </Link>
@@ -95,8 +87,10 @@ const Header = () => {
           ) : (
             <Link to='/login'>
               <div>
-                <RiAdminFill className='cursor-default' />
-                <p className='cursor-default'> Kindly Sign in</p>
+                <RiAdminFill className='cursor-default ml-5 md:m-0' />
+                <p className='cursor-default hidden  md:text-base md:inline-flex'>
+                  Kindly Sign in
+                </p>
               </div>
             </Link>
           )}
