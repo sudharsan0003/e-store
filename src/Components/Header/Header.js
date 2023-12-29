@@ -46,10 +46,9 @@ const Header = () => {
           </div>
         </Link>
       )}
-      {/* {accessToken ? <Searchbar /> : ''} */}
 
       <Link to='/about'>
-        <div className=' items-start justify-center headerHover hidden md:inline-flex'>
+        <div className=' items-start justify-center headerHover '>
           <p className='text-sm text-center font-semibold -mt-1 '>About</p>
         </div>
       </Link>

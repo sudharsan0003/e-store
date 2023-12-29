@@ -15,6 +15,7 @@ import Profile from './Pages/Profile';
 import { auth } from './firebase.config';
 import { ToastContainer } from 'react-toastify';
 import About from './Pages/About';
+import FilterPage from './Pages/FilterPage';
 
 const Layout = () => {
   return (
@@ -60,6 +61,10 @@ const App = () => {
         {
           path: '/profile',
           element: <Profile />,
+        },
+        {
+          path: '/filter',
+          element: <FilterPage />,
         },
         {
           path: '/cart',

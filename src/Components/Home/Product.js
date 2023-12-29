@@ -5,6 +5,7 @@ import { addToCart } from '../../redux/amazonSlice';
 import { UserConsumer } from '../../context/userContext';
 import { toast } from 'react-toastify';
 import { GoSearch } from 'react-icons/go';
+import { FaFilter } from 'react-icons/fa';
 
 const Product = () => {
   const dispatch = useDispatch();
@@ -23,16 +24,17 @@ const Product = () => {
 
   return (
     <>
-      <div className='mt-[2.5rem] relative z-30 md:-mt-3 lg:-mt-6 '>
+      <div className='mt-[2.5rem] relative z-30 md:-mt-3 lg:-mt-24 '>
         <div className='flex justify-center items-center w-f pb-4 z-50 '>
           <div className=''>
             <input
-              className=' text-base rounded-sm text-e_blue   border outline-none border-gray-500  py-1.5 md:border-none '
+              className=' text-base rounded-sm text-e_blue px-1  border outline-none border-gray-500  py-1.5 border-none '
               type='search'
               onChange={(e) => {
                 setSearch(e.target.value);
               }}
               value={search}
+              placeholder='Search Products'
             />
           </div>
           <span className='w-12 py-2.5 flex items-center justify-center bg-e_yellow hover:bg-[#f3a847] duration-300 text-amazon_blue cursor-pointer rounded-tr-md rounded-br-md'>
@@ -40,6 +42,18 @@ const Product = () => {
           </span>
         </div>
       </div>
+
+      <div className='flex justify-center items-center mb-1 md:absolute top-[60%] right-5 xl:top-[80%]'>
+        <Link to='/filter'>
+          <button className='flex  px-8 py-2 justify-center items-center  bg-orange-300'>
+            <span className='flex justify-center items-center'>
+              <FaFilter />
+            </span>
+            <button>Filter Products</button>
+          </button>
+        </Link>
+      </div>
+
       <div className='max-w-screen-2xl  mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6 xl:gap-10 px-4'>
         {productData
           .filter((row) => {
