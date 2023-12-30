@@ -43,7 +43,7 @@ const Product = () => {
         </div>
       </div>
 
-      <div className='flex justify-center items-center mb-1 md:absolute top-[60%] right-5 xl:top-[80%]'>
+      <div className='flex justify-center items-center mb-1 md:absolute top-[55%] right-5 '>
         <Link to='/filter'>
           <button className='flex  px-8 py-2 justify-center items-center  bg-orange-300'>
             <span className='flex justify-center items-center'>
@@ -54,7 +54,7 @@ const Product = () => {
         </Link>
       </div>
 
-      <div className='max-w-screen-2xl  mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6 xl:gap-10 px-4'>
+      <div className='max-w-screen-2xl  mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6 xl:gap-10 px-4 '>
         {productData
           .filter((row) => {
             if (search == '') {

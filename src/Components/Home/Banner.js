@@ -86,7 +86,7 @@ const Banner = () => {
   };
 
   return (
-    <div className='w-full z-0 '>
+    <div className='w-full z-0  '>
       <div className='w-full h-full relative'>
         <Slider {...settings}>
           <div>
